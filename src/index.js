@@ -61,14 +61,15 @@ function Pizza(props) {
   console.log(props);
 
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
+    <li className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>₹ {props.price + 10}</span>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>₹ {props.pizzaObj.price + 10}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -87,30 +88,64 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  // const pizzas = [];
+  const numPizzas = pizzas.length;
+
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        price={12}
-        photoName="pizzas/spinaci.jpg"
-      />
-      <Pizza
-        name="Pizza Prosciutto"
-        ingredients="Tomato, mozarella, ham, aragula, and burrata cheese"
-        price={18}
-        photoName="pizzas/prosciutto.jpg"
-      />
+
+      {/* <ul className="pizzas">
+        {numPizzas &&
+          pizzas.map((pizza) => {
+            return (
+              // <Pizza
+              //   name={pizza.name}
+              //   ingredients={pizza.ingredients}
+              //   photoName={pizza.photoName}
+              //   price={pizza.price}
+              // />
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            );
+          })}
+      </ul> */}
+
+      <ul className="pizzas">
+        {numPizzas > 0 ? (
+          pizzas.map((pizza) => {
+            return (
+              // <Pizza
+              //   name={pizza.name}
+              //   ingredients={pizza.ingredients}
+              //   photoName={pizza.photoName}
+              //   price={pizza.price}
+              // />
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            );
+          })
+        ) : (
+          <p>We're still working on our Menu. Please come back later :)</p>
+        )}
+      </ul>
     </main>
   );
 }
 
 const Footer = () => {
-  const timeNow = new Date().toLocaleTimeString();
+  const hour = new Date().getHours();
+  const openHour = 5;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+
   return (
     <footer className="footer">
-      <h3>{timeNow} Currently Open</h3>
+      {isOpen && (
+        <div className="order">
+          <p>We're Open Until {closeHour}:00 . Come visit us or order online</p>
+          <button className="btn">Order</button>
+        </div>
+      )}
     </footer>
   );
 };
