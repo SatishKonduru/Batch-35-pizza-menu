@@ -8,14 +8,14 @@ const pizzaData = [
     ingredients: "Bread with italian olive oil and rosemary",
     price: 6,
     photoName: "pizzas/focaccia.jpg",
-    soldOut: false,
+    soldOut: true,
   },
   {
     name: "Pizza Margherita",
     ingredients: "Tomato and mozarella",
     price: 10,
     photoName: "pizzas/margherita.jpg",
-    soldOut: false,
+    soldOut: true,
   },
   {
     name: "Pizza Spinaci",
@@ -57,17 +57,19 @@ function App() {
   );
 }
 
-function Pizza(props) {
-  console.log(props);
+function Pizza({ pizzaObj }) {
+  // console.log(props);
+  // if (pizzaObj.soldOut) return;
 
   return (
-    <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
 
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>₹ {props.pizzaObj.price + 10}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        {/* <span>₹ {pizzaObj.price + 10}</span> */}
+        <span>₹ {pizzaObj.soldOut ? "sold out" : pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -95,44 +97,46 @@ function Menu() {
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-
-      {/* <ul className="pizzas">
-        {numPizzas &&
-          pizzas.map((pizza) => {
-            return (
-              // <Pizza
-              //   name={pizza.name}
-              //   ingredients={pizza.ingredients}
-              //   photoName={pizza.photoName}
-              //   price={pizza.price}
-              // />
-              <Pizza pizzaObj={pizza} key={pizza.name} />
-            );
-          })}
-      </ul> */}
-
-      <ul className="pizzas">
-        {numPizzas > 0 ? (
-          pizzas.map((pizza) => {
-            return (
-              // <Pizza
-              //   name={pizza.name}
-              //   ingredients={pizza.ingredients}
-              //   photoName={pizza.photoName}
-              //   price={pizza.price}
-              // />
-              <Pizza pizzaObj={pizza} key={pizza.name} />
-            );
-          })
-        ) : (
-          <p>We're still working on our Menu. Please come back later :)</p>
-        )}
-      </ul>
+      <>
+        <p>
+          Authetic Indian cuisine. All from our stone oven, all organic , all
+          delicious
+        </p>
+        <ul className="pizzas">
+          {numPizzas > 0 ? (
+            pizzas.map((pizza) => {
+              return (
+                // <Pizza
+                //   name={pizza.name}
+                //   ingredients={pizza.ingredients}
+                //   photoName={pizza.photoName}
+                //   price={pizza.price}
+                // />
+                <Pizza pizzaObj={pizza} key={pizza.name} />
+              );
+            })
+          ) : (
+            <p>We're still working on our Menu. Please come back later :)</p>
+          )}
+        </ul>
+      </>
     </main>
   );
 }
 
+function Order({ closeHour, openHour }) {
+  return (
+    <div className="order">
+      <p>
+        We're Open from {openHour}:00 to {closeHour}:00 . Come visit us or order
+        online
+      </p>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
 const Footer = () => {
+  // console.log("Props: ", props);
   const hour = new Date().getHours();
   const openHour = 5;
   const closeHour = 22;
@@ -140,12 +144,7 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      {isOpen && (
-        <div className="order">
-          <p>We're Open Until {closeHour}:00 . Come visit us or order online</p>
-          <button className="btn">Order</button>
-        </div>
-      )}
+      {isOpen && <Order closeHour={closeHour} openHour={openHour} />}
     </footer>
   );
 };
